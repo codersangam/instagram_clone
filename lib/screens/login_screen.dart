@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram_clone/screens/signup_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/widgets/text_input_field.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -60,11 +61,18 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 VxBox(
-                  child: 'Already have an account?'.text.make(),
+                  child: 'Don\'t have an account?'.text.make(),
                 ).make().pSymmetric(v: 8),
                 5.widthBox,
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      (MaterialPageRoute(
+                        builder: (context) => const SignUpScreen(),
+                      )),
+                    );
+                  },
                   child: VxBox(
                     child: 'Sign up'.text.bold.make(),
                   ).make().pSymmetric(v: 8),
