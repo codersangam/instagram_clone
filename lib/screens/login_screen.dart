@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram_clone/resources/auth_methods.dart';
+import 'package:instagram_clone/responsive/mobile_screen_layout.dart';
+import 'package:instagram_clone/responsive/responsive.dart';
+import 'package:instagram_clone/responsive/web_screen_layout.dart';
 import 'package:instagram_clone/screens/signup_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/text_input_field.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -15,12 +20,39 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+  }
+
+  void login() async {
+    setState(() {
+      _isLoading = true;
+    });
+    String res = await AuthMethods().userLogin(
+        email: _emailController.text, password: _passwordController.text);
+    // ignore: avoid_print
+    print(res);
+    setState(() {
+      _isLoading = false;
+    });
+    if (res != "success") {
+      showSnackBar(res, context);
+    } else {
+      Navigator.pushReplacement(
+        context,
+        (MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+            webScreenLayout: WebScreenLayout(),
+            mobileScreenLayout: MobileScreenLayout(),
+          ),
+        )),
+      );
+    }
   }
 
   @override
@@ -50,10 +82,16 @@ class _LoginScreenState extends State<LoginScreen> {
             24.heightBox,
             SizedBox(
               width: double.infinity,
-              height: 40,
+              height: 50,
               child: ElevatedButton(
-                onPressed: () {},
-                child: 'Login'.text.make(),
+                onPressed: login,
+                child: _isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: primaryColor,
+                        ),
+                      )
+                    : 'Login'.text.make(),
               ),
             ),
             Flexible(flex: 2, child: VxBox().make()),
@@ -66,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 5.widthBox,
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       (MaterialPageRoute(
                         builder: (context) => const SignUpScreen(),
