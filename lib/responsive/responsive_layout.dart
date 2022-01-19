@@ -24,10 +24,11 @@ class _ResponsiveLayoutState extends State<ResponsiveLayout> {
     getData();
   }
 
-  getData() {
+  getData() async {
     UserProvider _userProvider =
         Provider.of<UserProvider>(context, listen: false);
-    _userProvider.getUserDetails();
+    await _userProvider.getUserDetails();
+    // await _userProvider.fetchUserDetails();
   }
 
   @override
