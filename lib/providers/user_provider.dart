@@ -17,7 +17,7 @@ class UserProvider with ChangeNotifier {
   }
 
   // UserModel? currentUserData;
-  // fetchUserDetails() async {
+  // Future<void> fetchUserDetails() async {
   //   DocumentSnapshot value = await FirebaseFirestore.instance
   //       .collection('Users')
   //       .doc(FirebaseAuth.instance.currentUser!.uid)
