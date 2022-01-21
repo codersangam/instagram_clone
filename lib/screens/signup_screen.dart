@@ -183,7 +183,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ],
             )
           ],
-        ),
+        ).expand(),
       ).make().pSymmetric(h: 32).w(double.infinity),
     );
   }
