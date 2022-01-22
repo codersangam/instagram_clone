@@ -107,17 +107,20 @@ class _AddPostScreenState extends State<AddPostScreen> {
         : Scaffold(
             appBar: AppBar(
               backgroundColor: mobileBackgroundColor,
-              title: 'Post'.text.make(),
+              title: 'New post'.text.make(),
               centerTitle: false,
               leading: IconButton(
                 onPressed: clearImage,
                 icon: const Icon(Icons.arrow_back),
               ),
               actions: [
-                TextButton(
+                IconButton(
                   onPressed: () =>
                       publishPost(data!.uid, data.username, data.profileUrl),
-                  child: 'Post'.text.blue500.lg.bold.make(),
+                  icon: const Icon(
+                    Icons.check,
+                    color: Vx.blue500,
+                  ),
                 ),
               ],
             ),
@@ -149,7 +152,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                       ),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
+                      width: MediaQuery.of(context).size.width * 0.7,
                       child: TextField(
                         controller: _descriptionController,
                         decoration: const InputDecoration(
