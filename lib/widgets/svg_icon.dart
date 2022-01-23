@@ -7,10 +7,12 @@ class SvgIcon extends StatelessWidget {
     Key? key,
     required this.imgPath,
     required this.onTap,
+    this.color,
   }) : super(key: key);
 
   final String imgPath;
   final VoidCallback onTap;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class SvgIcon extends StatelessWidget {
       onTap: onTap,
       child: SvgPicture.asset(
         imgPath,
-        color: Vx.white,
+        color: color,
         height: 30,
         width: 30,
       ).pOnly(right: 10),
