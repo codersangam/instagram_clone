@@ -27,19 +27,25 @@ class _HomeScreenState extends State<HomeScreen> {
           SvgIcon(
             imgPath: 'assets/images/plus.svg',
             onTap: () {},
+            color: Vx.white,
           ),
           SvgIcon(
             imgPath: 'assets/images/favourite.svg',
             onTap: () {},
+            color: Vx.white,
           ),
           SvgIcon(
             imgPath: 'assets/images/chat.svg',
             onTap: () {},
+            color: Vx.white,
           ),
         ],
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('Posts').snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('Posts')
+            .orderBy('postDate', descending: true)
+            .snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -50,13 +56,14 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
           return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) {
-                var data = snapshot.data!.docs[index];
-                return PostCard(
-                  data: data,
-                );
-              });
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              var data = snapshot.data!.docs[index];
+              return PostCard(
+                data: data,
+              );
+            },
+          );
         },
       ),
     );

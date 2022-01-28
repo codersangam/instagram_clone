@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone/models/user_model.dart';
 import 'package:instagram_clone/providers/user_provider.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/screens/comment_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/like_animation.dart';
 import 'package:instagram_clone/widgets/svg_icon.dart';
 import 'package:intl/intl.dart';
@@ -22,6 +24,29 @@ class PostCard extends StatefulWidget {
 
 class _PostCardState extends State<PostCard> {
   bool isLikeAnimation = false;
+  int commentsLength = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getCommentsLength();
+  }
+
+  void getCommentsLength() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('Posts')
+          .doc(widget.data['postId'])
+          .collection('Comments')
+          .get();
+
+      commentsLength = querySnapshot.docs.length;
+    } catch (e) {
+      showSnackBar(e.toString(), context);
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     UserModel? userModel = Provider.of<UserProvider>(context).getUser;
@@ -38,7 +63,10 @@ class _PostCardState extends State<PostCard> {
                 VxCircle(
                   radius: 40,
                   backgroundImage: DecorationImage(
-                    image: NetworkImage(widget.data['profileImage']),
+                    image: NetworkImage(
+                      widget.data['profileImage'],
+                    ),
+                    fit: BoxFit.cover,
                   ),
                 ),
                 Expanded(
@@ -67,7 +95,11 @@ class _PostCardState extends State<PostCard> {
                             ]
                                 .map(
                                   (e) => InkWell(
-                                    onTap: () {},
+                                    onTap: () async {
+                                      FireStoreMethods()
+                                          .deletePosts(widget.data['postId']);
+                                      Navigator.of(context).pop();
+                                    },
                                     child: Container(
                                       child: Text(e),
                                       padding: const EdgeInsets.symmetric(
@@ -154,7 +186,9 @@ class _PostCardState extends State<PostCard> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const CommentScreen(),
+                        builder: (context) => CommentScreen(
+                          postId: widget.data,
+                        ),
                       ),
                     );
                   },
@@ -215,7 +249,7 @@ class _PostCardState extends State<PostCard> {
                   onTap: () {},
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: "View all 200 comments"
+                    child: "View all $commentsLength comments"
                         .text
                         .color(secondaryColor)
                         .size(16)
