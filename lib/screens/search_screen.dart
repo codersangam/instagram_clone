@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:instagram_clone/screens/profile_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
 import 'package:instagram_clone/utils/dimensions.dart';
 
@@ -60,17 +61,30 @@ class _SearchScreenState extends State<SearchScreen> {
                 return ListView.builder(
                   itemCount: (snapshot.data! as dynamic).docs.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      leading: VxCircle(
-                        radius: 40,
-                        backgroundImage: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage((snapshot.data! as dynamic)
-                              .docs[index]['profileUrl']),
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(
+                              uid: (snapshot.data! as dynamic).docs[index]
+                                  ['uid'],
+                            ),
+                          ),
+                        );
+                      },
+                      child: ListTile(
+                        leading: VxCircle(
+                          radius: 40,
+                          backgroundImage: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage((snapshot.data! as dynamic)
+                                .docs[index]['profileUrl']),
+                          ),
                         ),
+                        title: Text((snapshot.data! as dynamic).docs[index]
+                            ['username']),
                       ),
-                      title: Text(
-                          (snapshot.data! as dynamic).docs[index]['username']),
                     );
                   },
                 );
