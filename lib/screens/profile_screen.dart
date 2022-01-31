@@ -5,6 +5,7 @@ import 'package:instagram_clone/resources/auth_methods.dart';
 import 'package:instagram_clone/resources/firestore_methods.dart';
 import 'package:instagram_clone/screens/login_screen.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/dimensions.dart';
 import 'package:instagram_clone/utils/utils.dart';
 import 'package:instagram_clone/widgets/follow_button.dart';
 import 'package:instagram_clone/widgets/svg_icon.dart';
@@ -65,6 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return isLoading
         ? const Center(
             child: CircularProgressIndicator(
@@ -72,24 +74,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           )
         : Scaffold(
-            appBar: AppBar(
-              backgroundColor: mobileBackgroundColor,
-              title: Text(userData['username']),
-              centerTitle: false,
-              actions: [
-                SvgIcon(
-                  imgPath: 'assets/images/plus.svg',
-                  onTap: () {},
-                  color: primaryColor,
-                ),
-                10.widthBox,
-                SvgIcon(
-                  imgPath: 'assets/images/menu.svg',
-                  onTap: () {},
-                  color: primaryColor,
-                ),
-              ],
-            ),
+            appBar: width > webScreenSize
+                ? null
+                : AppBar(
+                    backgroundColor: mobileBackgroundColor,
+                    title: Text(userData['username']),
+                    centerTitle: false,
+                    actions: [
+                      SvgIcon(
+                        imgPath: 'assets/images/plus.svg',
+                        onTap: () {},
+                        color: primaryColor,
+                      ),
+                      10.widthBox,
+                      SvgIcon(
+                        imgPath: 'assets/images/menu.svg',
+                        onTap: () {},
+                        color: primaryColor,
+                      ),
+                    ],
+                  ),
             body: ListView(
               children: [
                 Padding(

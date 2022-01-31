@@ -84,7 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Flexible(flex: 2, child: VxBox().make()),
+            Flexible(flex: 2, child: Container()),
             SvgPicture.asset(
               'assets/images/ic_instagram.svg',
               color: primaryColor,
@@ -159,7 +159,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     : 'Sign Up'.text.make(),
               ),
             ),
-            Flexible(flex: 2, child: VxBox().make()),
+            Flexible(flex: 2, child: Container()),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
