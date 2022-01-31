@@ -81,44 +81,47 @@ class _PostCardState extends State<PostCard> {
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.more_vert),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) => Dialog(
-                        child: ListView(
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            shrinkWrap: true,
-                            children: [
-                              "Delete",
-                            ]
-                                .map(
-                                  (e) => InkWell(
-                                    onTap: () async {
-                                      FireStoreMethods()
-                                          .deletePosts(widget.data['postId']);
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Container(
-                                      child: Text(e),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16, vertical: 12),
-                                    ),
-                                  ),
-                                )
-                                .toList()),
-                      ),
-                    );
-                  },
-                ),
+                widget.data['uid'].toString() == userModel!.uid
+                    ? IconButton(
+                        icon: const Icon(Icons.more_vert),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => Dialog(
+                              child: ListView(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  shrinkWrap: true,
+                                  children: [
+                                    "Delete",
+                                  ]
+                                      .map(
+                                        (e) => InkWell(
+                                          onTap: () async {
+                                            FireStoreMethods().deletePosts(
+                                                widget.data['postId']);
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Container(
+                                            child: Text(e),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 16, vertical: 12),
+                                          ),
+                                        ),
+                                      )
+                                      .toList()),
+                            ),
+                          );
+                        },
+                      )
+                    : Container(),
               ],
             ),
           ),
           GestureDetector(
             onDoubleTap: () async {
               await FireStoreMethods().postLike(widget.data['postId'],
-                  userModel!.uid, widget.data['postLikes']);
+                  userModel.uid, widget.data['postLikes']);
 
               setState(() {
                 isLikeAnimation = true;
@@ -162,8 +165,7 @@ class _PostCardState extends State<PostCard> {
             child: Row(
               children: [
                 LikeAnimation(
-                  isAnimation:
-                      widget.data['postLikes'].contains(userModel!.uid),
+                  isAnimation: widget.data['postLikes'].contains(userModel.uid),
                   smallLike: true,
                   child: SvgIcon(
                     onTap: () async {

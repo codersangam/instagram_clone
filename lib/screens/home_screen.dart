@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_clone/utils/colors.dart';
+import 'package:instagram_clone/utils/dimensions.dart';
 import 'package:instagram_clone/widgets/post_card.dart';
 import 'package:instagram_clone/widgets/svg_icon.dart';
 import 'package:velocity_x/velocity_x.dart';
@@ -16,31 +17,34 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
-        title: SvgPicture.asset(
-          'assets/images/ic_instagram.svg',
-          color: Vx.white,
-        ),
-        actions: [
-          SvgIcon(
-            imgPath: 'assets/images/plus.svg',
-            onTap: () {},
-            color: Vx.white,
-          ),
-          SvgIcon(
-            imgPath: 'assets/images/favourite.svg',
-            onTap: () {},
-            color: Vx.white,
-          ),
-          SvgIcon(
-            imgPath: 'assets/images/chat.svg',
-            onTap: () {},
-            color: Vx.white,
-          ),
-        ],
-      ),
+      appBar: width > webScreenSize
+          ? null
+          : AppBar(
+              backgroundColor: mobileBackgroundColor,
+              title: SvgPicture.asset(
+                'assets/images/ic_instagram.svg',
+                color: Vx.white,
+              ),
+              actions: [
+                SvgIcon(
+                  imgPath: 'assets/images/plus.svg',
+                  onTap: () {},
+                  color: Vx.white,
+                ),
+                SvgIcon(
+                  imgPath: 'assets/images/favourite.svg',
+                  onTap: () {},
+                  color: Vx.white,
+                ),
+                SvgIcon(
+                  imgPath: 'assets/images/chat.svg',
+                  onTap: () {},
+                  color: Vx.white,
+                ),
+              ],
+            ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('Posts')
@@ -59,8 +63,13 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
               var data = snapshot.data!.docs[index];
-              return PostCard(
-                data: data,
+              return Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: width > webScreenSize ? width * 0.3 : 0,
+                    vertical: width > webScreenSize ? 15 : 0),
+                child: PostCard(
+                  data: data,
+                ),
               );
             },
           );
